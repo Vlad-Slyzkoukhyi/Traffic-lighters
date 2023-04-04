@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +10,23 @@ namespace Traffic_lighters
 {
     internal class TrafficLighterModes
     {
-        internal Road_Traffic_Lighters mainRoadTrafficLighter_1 = new("=1=");
-        internal Road_Traffic_Lighters mainRoadTrafficLighter_2 = new("=2=");
-        internal Road_Traffic_Lighters secondaryRoadTrafficLighter_1 = new("=3=");
-        internal Road_Traffic_Lighters secondaryRoadTrafficLighter_2 = new("=4=");
-        internal Tram_Traffic_Lighters tramTrafficLighter_1 = new("=5=");
-        internal Tram_Traffic_Lighters tramTrafficLighter_2 = new("=6=");
-        internal Pedestrian_Traffic_Lighters pedestrianTrafficLighter_1 = new("=7=");
-        internal Pedestrian_Traffic_Lighters pedestrianTrafficLighter_2 = new("=8=");
+        internal Dictionary<string, Road_Traffic_Lighters> roadTrafficlighters = new()
+        {
+            {"mainRoadTL_1", new Road_Traffic_Lighters ("=1=")},
+            {"mainRoadTL_2", new Road_Traffic_Lighters ("=2=")},
+            {"secondaryRoadTL_1", new Road_Traffic_Lighters("=3=")},
+            {"secondaryRoadTL_2", new Road_Traffic_Lighters("=4=")}
+        };
+        internal Dictionary<string, Tram_Traffic_Lighters> tramTrafficlighters = new()
+        {
+            {"tramTL_1", new Tram_Traffic_Lighters("=5=")},
+            {"tramTL_2", new Tram_Traffic_Lighters("=6=")}
+        };
+        internal Dictionary<string, Pedestrian_Traffic_Lighters> pedestrianTrafficlighters = new()
+        {
+            {"pedestrianTL_1", new Pedestrian_Traffic_Lighters("=7=")},
+            {"pedestrianTL_2", new Pedestrian_Traffic_Lighters("=8=")}
+        };        
 
         internal const int mainTimer = 5000;
         internal const int blinkTimer = 500;
@@ -24,279 +34,291 @@ namespace Traffic_lighters
         internal const int yellowTimer = 2000;
         internal int cycleTime = 0;
 
-        internal enum DayTimeModes
-        {
-            First = 1,
-            Second = 2,
-            Third = 3,
-            Fourth = 4,
-            Fifth = 5,
-            Sixth = 6,
-            Seventh = 7
-        }
-        internal enum NightTimeModes
-        {
-            First = 1,
-            Second = 2
-        }
         internal enum WorkMode
         {
-            First = 1,
-            Second = 2,
-            Third = 3
+            DayTimeMode = 1,
+            ModeUntilMidnight = 2,
+            ModeAfterMidnight = 3
         }
+        
         internal void CheckStatus()
         {
-            mainRoadTrafficLighter_1.TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
-            mainRoadTrafficLighter_2.TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
-            secondaryRoadTrafficLighter_1.TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
-            secondaryRoadTrafficLighter_2.TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
-            tramTrafficLighter_1.TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
-            tramTrafficLighter_2.TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
-            pedestrianTrafficLighter_1.TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
-            pedestrianTrafficLighter_2.TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
-            mainRoadTrafficLighter_1.CheckTrafficLighterStatus();
-            mainRoadTrafficLighter_2.CheckTrafficLighterStatus();
-            secondaryRoadTrafficLighter_1.CheckTrafficLighterStatus();
-            secondaryRoadTrafficLighter_2.CheckTrafficLighterStatus();
-            tramTrafficLighter_1.CheckTrafficLighterStatus();
-            tramTrafficLighter_2.CheckTrafficLighterStatus();
-            pedestrianTrafficLighter_1.CheckTrafficLighterStatus();
-            pedestrianTrafficLighter_2.CheckTrafficLighterStatus();
+            roadTrafficlighters["mainRoadTL_1"].TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
+            roadTrafficlighters["mainRoadTL_2"].TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
+            roadTrafficlighters["secondaryRoadTL_1"].TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
+            roadTrafficlighters["secondaryRoadTL_2"].TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
+            tramTrafficlighters["tramTL_1"].TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
+            tramTrafficlighters["tramTL_2"].TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
+            pedestrianTrafficlighters["pedestrianTL_1"].TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
+            pedestrianTrafficlighters["pedestrianTL_2"].TrafficLighterEvent += CheckStatusShowModuleEventArgs.CheckTrafficLighterStatus;
+            roadTrafficlighters["mainRoadTL_1"].CheckTrafficLighterStatus();
+            roadTrafficlighters["mainRoadTL_2"].CheckTrafficLighterStatus();
+            roadTrafficlighters["secondaryRoadTL_1"].CheckTrafficLighterStatus();
+            roadTrafficlighters["secondaryRoadTL_2"].CheckTrafficLighterStatus();
+            tramTrafficlighters["tramTL_1"].CheckTrafficLighterStatus();
+            tramTrafficlighters["tramTL_2"].CheckTrafficLighterStatus();
+            pedestrianTrafficlighters["pedestrianTL_1"].CheckTrafficLighterStatus();
+            pedestrianTrafficlighters["pedestrianTL_2"].CheckTrafficLighterStatus();
         }
         internal async Task Work_Mode(WorkMode mode)
         {
-            mainRoadTrafficLighter_1.RoadTrafficLighterEvent += RoadTrafficLighterEventArgs.ShowRoadTrafficLighter;
-            mainRoadTrafficLighter_2.RoadTrafficLighterEvent += RoadTrafficLighterEventArgs.ShowRoadTrafficLighter;
-            secondaryRoadTrafficLighter_1.RoadTrafficLighterEvent += RoadTrafficLighterEventArgs.ShowRoadTrafficLighter;
-            secondaryRoadTrafficLighter_2.RoadTrafficLighterEvent += RoadTrafficLighterEventArgs.ShowRoadTrafficLighter;
-            tramTrafficLighter_1.TramTrafficLighterEvent += TramTrafficLighterEventArgs.ShowTramTrafficLighter;
-            tramTrafficLighter_2.TramTrafficLighterEvent += TramTrafficLighterEventArgs.ShowTramTrafficLighter;
-            pedestrianTrafficLighter_1.PedestrianTrafficLighterEvent += PedestrianTrafficLighterEventArgs.ShowPedestrianTrafficLight;
-            pedestrianTrafficLighter_2.PedestrianTrafficLighterEvent += PedestrianTrafficLighterEventArgs.ShowPedestrianTrafficLight;
+            roadTrafficlighters["mainRoadTL_1"].RoadTrafficLighterEvent += RoadTrafficLighterEventArgs.ShowRoadTrafficLighter;
+            roadTrafficlighters["mainRoadTL_2"].RoadTrafficLighterEvent += RoadTrafficLighterEventArgs.ShowRoadTrafficLighter;
+            roadTrafficlighters["secondaryRoadTL_1"].RoadTrafficLighterEvent += RoadTrafficLighterEventArgs.ShowRoadTrafficLighter;
+            roadTrafficlighters["secondaryRoadTL_2"].RoadTrafficLighterEvent += RoadTrafficLighterEventArgs.ShowRoadTrafficLighter;
+            tramTrafficlighters["tramTL_1"].TramTrafficLighterEvent += TramTrafficLighterEventArgs.ShowTramTrafficLighter;
+            tramTrafficlighters["tramTL_2"].TramTrafficLighterEvent += TramTrafficLighterEventArgs.ShowTramTrafficLighter;
+            pedestrianTrafficlighters["pedestrianTL_1"].PedestrianTrafficLighterEvent += PedestrianTrafficLighterEventArgs.ShowPedestrianTrafficLight;
+            pedestrianTrafficlighters["pedestrianTL_2"].PedestrianTrafficLighterEvent += PedestrianTrafficLighterEventArgs.ShowPedestrianTrafficLight;
             switch (mode)
             {
-                case WorkMode.First:
+                case WorkMode.DayTimeMode:
                     for (int i = TimeOfDay.TimeNow(); i >= TimeOfDay.DayModeStart() 
                         && i <= TimeOfDay.DayModeEnd(); i += cycleTime)
                     {
                         cycleTime = 0;
-                        await DayTime_mode(DayTimeModes.First);
+                        await DayTime_mode();
                     }
-                    goto case WorkMode.Second;
-                case WorkMode.Second:
+                    goto case WorkMode.ModeUntilMidnight;
+                case WorkMode.ModeUntilMidnight:
                     OffTramAndPedestrian();
                     for (int i = TimeOfDay.TimeNow(); i > TimeOfDay.DayModeEnd() && i < TimeOfDay.DayEnd(); i+=cycleTime)                    
                     {
                         cycleTime = 0;                        
-                        await NightTime_mode(NightTimeModes.First);
+                        await NightTime_mode();
                     }
-                    goto case WorkMode.Third;
-                case WorkMode.Third:
+                    goto case WorkMode.ModeAfterMidnight;
+                case WorkMode.ModeAfterMidnight:
                     OffTramAndPedestrian();
                     for( int i = TimeOfDay.TimeNow(); i > TimeOfDay.DayStart() && i < TimeOfDay.DayModeStart(); i+=cycleTime)
                     {
                         cycleTime = 0;
-                        await NightTime_mode(NightTimeModes.First);
+                        await NightTime_mode();
                     }
-                    goto case WorkMode.First;                    
+                    goto case WorkMode.DayTimeMode;                    
             }            
-        }              
+        }
 
-        internal async Task DayTime_mode(DayTimeModes mode)
+        internal async Task DayTime_mode()
         {
-            switch (mode)
-            {
-                case DayTimeModes.First:
-                    mainRoadTrafficLighter_1.RedOn();
-                    mainRoadTrafficLighter_2.RedOn();
-                    secondaryRoadTrafficLighter_1.RedOn();
-                    secondaryRoadTrafficLighter_2.RedOn();
-                    tramTrafficLighter_1.RedOn();
-                    tramTrafficLighter_2.RedOn();
-                    pedestrianTrafficLighter_1.RedOn();
-                    pedestrianTrafficLighter_2.RedOn();
-                    goto case DayTimeModes.Second;
-                case DayTimeModes.Second:
-                    mainRoadTrafficLighter_1.RedYellowOn();
-                    mainRoadTrafficLighter_2.RedYellowOn();
-                    secondaryRoadTrafficLighter_1.RedOn();
-                    secondaryRoadTrafficLighter_2.RedOn();
-                    tramTrafficLighter_1.RedOn();
-                    tramTrafficLighter_2.RedOn();
-                    pedestrianTrafficLighter_1.RedOn();
-                    pedestrianTrafficLighter_2.RedOn();
-                    await Task.Delay(yellowTimer);
-                    cycleTime += yellowTimer;
-                    goto case DayTimeModes.Third;
-                case DayTimeModes.Third:
-                    mainRoadTrafficLighter_1.GreenOn();
-                    mainRoadTrafficLighter_2.GreenOn();
-                    secondaryRoadTrafficLighter_1.RedOn();
-                    secondaryRoadTrafficLighter_2.RedOn();
-                    tramTrafficLighter_1.RedOn();
-                    tramTrafficLighter_2.RedOn();
-                    pedestrianTrafficLighter_1.RedOn();
-                    pedestrianTrafficLighter_2.RedOn();
-                    await Task.Delay(mainTimer);
-                    cycleTime += mainTimer;
-                    mainRoadTrafficLighter_1.OffLight();
-                    mainRoadTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    mainRoadTrafficLighter_1.GreenOn();
-                    mainRoadTrafficLighter_2.GreenOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    mainRoadTrafficLighter_1.OffLight();
-                    mainRoadTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    mainRoadTrafficLighter_1.GreenOn();
-                    mainRoadTrafficLighter_2.GreenOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    mainRoadTrafficLighter_1.OffLight();
-                    mainRoadTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    mainRoadTrafficLighter_1.GreenOn();
-                    mainRoadTrafficLighter_2.GreenOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    mainRoadTrafficLighter_1.OffLight();
-                    mainRoadTrafficLighter_2.OffLight();                    
-                    goto case DayTimeModes.Fourth;
-                case DayTimeModes.Fourth:
-                    mainRoadTrafficLighter_1.YellowOn();
-                    mainRoadTrafficLighter_2.YellowOn();
-                    secondaryRoadTrafficLighter_1.RedYellowOn();
-                    secondaryRoadTrafficLighter_2.RedYellowOn();
-                    tramTrafficLighter_1.RedOn();
-                    tramTrafficLighter_2.RedOn();
-                    pedestrianTrafficLighter_1.RedOn();
-                    pedestrianTrafficLighter_2.RedOn();
-                    await Task.Delay(yellowTimer);
-                    cycleTime += yellowTimer;
-                    goto case DayTimeModes.Fifth;
-                case DayTimeModes.Fifth:
-                    mainRoadTrafficLighter_1.RedOn();
-                    mainRoadTrafficLighter_2.RedOn();
-                    secondaryRoadTrafficLighter_1.GreenOn();
-                    secondaryRoadTrafficLighter_2.GreenOn();
-                    tramTrafficLighter_1.RedOn();
-                    tramTrafficLighter_2.RedOn();
-                    pedestrianTrafficLighter_1.RedOn();
-                    pedestrianTrafficLighter_2.RedOn();
-                    await Task.Delay(mainTimer);
-                    cycleTime += mainTimer;
-                    secondaryRoadTrafficLighter_1.OffLight();
-                    secondaryRoadTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    secondaryRoadTrafficLighter_1.GreenOn();
-                    secondaryRoadTrafficLighter_2.GreenOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    secondaryRoadTrafficLighter_1.OffLight();
-                    secondaryRoadTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    secondaryRoadTrafficLighter_1.GreenOn();
-                    secondaryRoadTrafficLighter_2.GreenOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    secondaryRoadTrafficLighter_1.OffLight();
-                    secondaryRoadTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    secondaryRoadTrafficLighter_1.GreenOn();
-                    secondaryRoadTrafficLighter_2.GreenOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    secondaryRoadTrafficLighter_1.OffLight();
-                    secondaryRoadTrafficLighter_2.OffLight();
-                    goto case DayTimeModes.Sixth;
-                case DayTimeModes.Sixth:
-                    mainRoadTrafficLighter_1.RedOn();
-                    mainRoadTrafficLighter_2.RedOn();
-                    secondaryRoadTrafficLighter_1.YellowOn();
-                    secondaryRoadTrafficLighter_2.YellowOn();
-                    tramTrafficLighter_1.RedOn();
-                    tramTrafficLighter_2.RedOn();
-                    pedestrianTrafficLighter_1.RedOn();
-                    pedestrianTrafficLighter_2.RedOn();
-                    await Task.Delay(yellowTimer);
-                    cycleTime += yellowTimer;
-                    goto case DayTimeModes.Seventh;
-                case DayTimeModes.Seventh:
-                    mainRoadTrafficLighter_1.RedOn();
-                    mainRoadTrafficLighter_2.RedOn();
-                    secondaryRoadTrafficLighter_1.RedOn();
-                    secondaryRoadTrafficLighter_2.RedOn();
-                    tramTrafficLighter_1.GreenOn();
-                    tramTrafficLighter_2.GreenOn();
-                    pedestrianTrafficLighter_1.GreenOn();
-                    pedestrianTrafficLighter_2.GreenOn();
-                    await Task.Delay(mainTimer);
-                    cycleTime += mainTimer;
-                    pedestrianTrafficLighter_1.OffLight();
-                    pedestrianTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    pedestrianTrafficLighter_1.GreenOn();
-                    pedestrianTrafficLighter_2.GreenOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    pedestrianTrafficLighter_1.OffLight();
-                    pedestrianTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    pedestrianTrafficLighter_1.GreenOn();
-                    pedestrianTrafficLighter_2.GreenOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    pedestrianTrafficLighter_1.OffLight();
-                    pedestrianTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    pedestrianTrafficLighter_1.GreenOn();
-                    pedestrianTrafficLighter_2.GreenOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    pedestrianTrafficLighter_1.OffLight();
-                    pedestrianTrafficLighter_2.OffLight();
-                    break;
-            }            
+            AllRed();
+            await MainRoadRedYellow();
+            await MainRoadGreen();
+            await MainRoadBlinkGreen();
+            await SecondaryRoadRedYellowMainYellow();
+            await SecondaryRoadGreen();
+            await SecondaryRoadBlinkGreen();
+            await SecondaryRoadYellow();
+            await TramPedestrianGreen();
+            await PedestrianBlinkGreen();
         }
-        internal async Task NightTime_mode(NightTimeModes mode)
-        {            
-            switch (mode)
-            {
-                case NightTimeModes.First:
-                    mainRoadTrafficLighter_1.OffLight();
-                    mainRoadTrafficLighter_2.OffLight();
-                    secondaryRoadTrafficLighter_1.OffLight();
-                    secondaryRoadTrafficLighter_2.OffLight();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    goto case NightTimeModes.Second;
-                case NightTimeModes.Second:
-                    mainRoadTrafficLighter_1.YellowOn();
-                    mainRoadTrafficLighter_2.YellowOn();
-                    secondaryRoadTrafficLighter_1.YellowOn();
-                    secondaryRoadTrafficLighter_2.YellowOn();
-                    await Task.Delay(blinkTimer);
-                    cycleTime += blinkTimer;
-                    break;
-            }
+        internal void AllRed()
+        {
+            roadTrafficlighters["mainRoadTL_1"].RedOn();
+            roadTrafficlighters["mainRoadTL_2"].RedOn();
+            roadTrafficlighters["secondaryRoadTL_1"].RedOn();
+            roadTrafficlighters["secondaryRoadTL_2"].RedOn();
+            tramTrafficlighters["tramTL_1"].RedOn();
+            tramTrafficlighters["tramTL_2"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_1"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].RedOn();
         }
+        async Task MainRoadRedYellow()
+        {
+            roadTrafficlighters["mainRoadTL_1"].RedYellowOn();
+            roadTrafficlighters["mainRoadTL_2"].RedYellowOn();
+            roadTrafficlighters["secondaryRoadTL_1"].RedOn();
+            roadTrafficlighters["secondaryRoadTL_2"].RedOn();
+            tramTrafficlighters["tramTL_1"].RedOn();
+            tramTrafficlighters["tramTL_2"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_1"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].RedOn();
+            await Task.Delay(yellowTimer);
+            cycleTime += yellowTimer;
+        }
+        async Task MainRoadGreen()
+        {
+            roadTrafficlighters["mainRoadTL_1"].GreenOn();
+            roadTrafficlighters["mainRoadTL_2"].GreenOn();
+            roadTrafficlighters["secondaryRoadTL_1"].RedOn();
+            roadTrafficlighters["secondaryRoadTL_2"].RedOn();
+            tramTrafficlighters["tramTL_1"].RedOn();
+            tramTrafficlighters["tramTL_2"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_1"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].RedOn();
+            await Task.Delay(mainTimer);
+            cycleTime += mainTimer;
+        }
+        async Task MainRoadBlinkGreen()
+        {
+            roadTrafficlighters["mainRoadTL_1"].OffLight();
+            roadTrafficlighters["mainRoadTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["mainRoadTL_1"].GreenOn();
+            roadTrafficlighters["mainRoadTL_2"].GreenOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["mainRoadTL_1"].OffLight();
+            roadTrafficlighters["mainRoadTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["mainRoadTL_1"].GreenOn();
+            roadTrafficlighters["mainRoadTL_2"].GreenOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["mainRoadTL_1"].OffLight();
+            roadTrafficlighters["mainRoadTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["mainRoadTL_1"].GreenOn();
+            roadTrafficlighters["mainRoadTL_2"].GreenOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["mainRoadTL_1"].OffLight();
+            roadTrafficlighters["mainRoadTL_2"].OffLight();
+        }
+        async Task SecondaryRoadRedYellowMainYellow()
+        {
+            roadTrafficlighters["mainRoadTL_1"].YellowOn();
+            roadTrafficlighters["mainRoadTL_2"].YellowOn();
+            roadTrafficlighters["secondaryRoadTL_1"].RedYellowOn();
+            roadTrafficlighters["secondaryRoadTL_2"].RedYellowOn();
+            tramTrafficlighters["tramTL_1"].RedOn();
+            tramTrafficlighters["tramTL_2"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_1"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].RedOn();
+            await Task.Delay(yellowTimer);
+            cycleTime += yellowTimer;
+        }
+        async Task SecondaryRoadGreen()
+        {
+            roadTrafficlighters["mainRoadTL_1"].RedOn();
+            roadTrafficlighters["mainRoadTL_2"].RedOn();
+            roadTrafficlighters["secondaryRoadTL_1"].GreenOn();
+            roadTrafficlighters["secondaryRoadTL_2"].GreenOn();
+            tramTrafficlighters["tramTL_1"].RedOn();
+            tramTrafficlighters["tramTL_2"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_1"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].RedOn();
+            await Task.Delay(mainTimer);
+            cycleTime += mainTimer;
+        }
+        async Task SecondaryRoadBlinkGreen()
+        {
+            roadTrafficlighters["secondaryRoadTL_1"].OffLight();
+            roadTrafficlighters["secondaryRoadTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["secondaryRoadTL_1"].GreenOn();
+            roadTrafficlighters["secondaryRoadTL_2"].GreenOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["secondaryRoadTL_1"].OffLight();
+            roadTrafficlighters["secondaryRoadTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["secondaryRoadTL_1"].GreenOn();
+            roadTrafficlighters["secondaryRoadTL_2"].GreenOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["secondaryRoadTL_1"].OffLight();
+            roadTrafficlighters["secondaryRoadTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["secondaryRoadTL_1"].GreenOn();
+            roadTrafficlighters["secondaryRoadTL_2"].GreenOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            roadTrafficlighters["secondaryRoadTL_1"].OffLight();
+            roadTrafficlighters["secondaryRoadTL_2"].OffLight();
+        }
+        async Task SecondaryRoadYellow()
+        {
+            roadTrafficlighters["mainRoadTL_1"].RedOn();
+            roadTrafficlighters["mainRoadTL_2"].RedOn();
+            roadTrafficlighters["secondaryRoadTL_1"].YellowOn();
+            roadTrafficlighters["secondaryRoadTL_2"].YellowOn();
+            tramTrafficlighters["tramTL_1"].RedOn();
+            tramTrafficlighters["tramTL_2"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_1"].RedOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].RedOn();
+            await Task.Delay(yellowTimer);
+            cycleTime += yellowTimer;
+        }
+        async Task TramPedestrianGreen()
+        {
+            roadTrafficlighters["mainRoadTL_1"].RedOn();
+            roadTrafficlighters["mainRoadTL_2"].RedOn();
+            roadTrafficlighters["secondaryRoadTL_1"].RedOn();
+            roadTrafficlighters["secondaryRoadTL_2"].RedOn();
+            tramTrafficlighters["tramTL_1"].GreenOn();
+            tramTrafficlighters["tramTL_2"].GreenOn();
+            pedestrianTrafficlighters["pedestrianTL_1"].GreenOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].GreenOn();
+            await Task.Delay(mainTimer);
+            cycleTime += mainTimer;
+        }
+        async Task PedestrianBlinkGreen()
+        {
+            pedestrianTrafficlighters["pedestrianTL_1"].OffLight();
+            pedestrianTrafficlighters["pedestrianTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            pedestrianTrafficlighters["pedestrianTL_1"].GreenOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].GreenOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            pedestrianTrafficlighters["pedestrianTL_1"].OffLight();
+            pedestrianTrafficlighters["pedestrianTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            pedestrianTrafficlighters["pedestrianTL_1"].GreenOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].GreenOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            pedestrianTrafficlighters["pedestrianTL_1"].OffLight();
+            pedestrianTrafficlighters["pedestrianTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            pedestrianTrafficlighters["pedestrianTL_1"].GreenOn();
+            pedestrianTrafficlighters["pedestrianTL_2"].GreenOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+            pedestrianTrafficlighters["pedestrianTL_1"].OffLight();
+            pedestrianTrafficlighters["pedestrianTL_2"].OffLight();
+        }
+
+        internal async Task NightTime_mode()
+        {
+            await OffLightMainSecondary();
+            await MainSecondaryYellow();
+        }
+        async Task OffLightMainSecondary()
+        {
+            roadTrafficlighters["mainRoadTL_1"].OffLight();
+            roadTrafficlighters["mainRoadTL_2"].OffLight();
+            roadTrafficlighters["secondaryRoadTL_1"].OffLight();
+            roadTrafficlighters["secondaryRoadTL_2"].OffLight();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+        }
+        async Task MainSecondaryYellow()
+        {
+            roadTrafficlighters["mainRoadTL_1"].YellowOn();
+            roadTrafficlighters["mainRoadTL_2"].YellowOn();
+            roadTrafficlighters["secondaryRoadTL_1"].YellowOn();
+            roadTrafficlighters["secondaryRoadTL_2"].YellowOn();
+            await Task.Delay(blinkTimer);
+            cycleTime += blinkTimer;
+        }
+        
         internal void OffTramAndPedestrian()
         {
-            tramTrafficLighter_1.OffLight();
-            tramTrafficLighter_2.OffLight();
-            pedestrianTrafficLighter_1.OffLight();
-            pedestrianTrafficLighter_2.OffLight();
+            tramTrafficlighters["tramTL_1"].OffLight();
+            tramTrafficlighters["tramTL_2"].OffLight();
+            pedestrianTrafficlighters["pedestrianTL_1"].OffLight();
+            pedestrianTrafficlighters["pedestrianTL_2"].OffLight();
         }
     }
 }

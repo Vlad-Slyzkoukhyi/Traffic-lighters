@@ -7,6 +7,6 @@ TrafficLighterModes mode = new ();
 
 mode.CheckStatus();
 
-await mode.Work_Mode(WorkMode.First);
+await mode.Work_Mode(WorkMode.DayTimeMode);
 
 

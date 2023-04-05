@@ -26,7 +26,29 @@ namespace Traffic_lighters
         {
             {"pedestrianTL_1", new Pedestrian_Traffic_Lighters("=7=")},
             {"pedestrianTL_2", new Pedestrian_Traffic_Lighters("=8=")}
-        };        
+        };
+
+        internal Dictionary<string, Road_Traffic_Lighters> roadTrafficlightersStates = new()
+        {
+            {"RoadTL_Red", new Road_Traffic_Lighters ("RoadTL") {RedLamp = true, YellowLamp = false, GreenLamp = false}},
+            {"RoadTL_RedYellow", new Road_Traffic_Lighters ("RoadTL") {RedLamp = true, YellowLamp = true, GreenLamp = false}},
+            {"RoadTL_Yellow", new Road_Traffic_Lighters("RoadTL") {RedLamp = false, YellowLamp = true, GreenLamp = false}},
+            {"RoadTL_Green", new Road_Traffic_Lighters("RoadTL") {RedLamp = false, YellowLamp = false, GreenLamp = true}},
+            {"RoadTL_Off", new Road_Traffic_Lighters("RoadTL"){RedLamp = false, YellowLamp = false, GreenLamp = false} }
+        };
+        internal Dictionary<string, Tram_Traffic_Lighters> tramTrafficlightersStates = new()
+        {
+            {"TramTL_Red", new Tram_Traffic_Lighters("TramTL"){RightLamp = true, MiddleLamp = true, LeftLamp = true, BottomLamp = false}},
+            {"TramTL_Green", new Tram_Traffic_Lighters("TramTL"){RightLamp = true, MiddleLamp = true, LeftLamp = true, BottomLamp = true}},
+            {"TramTL_Off", new Tram_Traffic_Lighters("TramTL"){RightLamp = false, MiddleLamp = false, LeftLamp = false, BottomLamp = false}}
+        };
+        internal Dictionary<string, Pedestrian_Traffic_Lighters> pedestrianTrafficlightersStates = new()
+        {
+            {"pedestrianTL_Red", new Pedestrian_Traffic_Lighters("PedestrianTL"){RedLamp = true, GreenLamp = false } },
+            {"pedestrianTL_Green", new Pedestrian_Traffic_Lighters("PedestrianTL"){RedLamp = false, GreenLamp = true }},
+            {"pedestrianTL_Off", new Pedestrian_Traffic_Lighters("PedestrianTL"){RedLamp = false, GreenLamp = false }}
+        };    
+        
 
         internal const int mainTimer = 5000;
         internal const int blinkTimer = 500;

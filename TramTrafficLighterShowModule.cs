@@ -4,26 +4,49 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-
+using Traffic_lighters;
+using static Traffic_lighters.CrossRoadController;
 
 namespace Traffic_lighters
 {
     internal class TramTrafficLighterEventArgs
     {
+        internal CrossRoadController.StatesCondition? State { get; set; }
+        internal CrossRoadController.TrafficLightsNames Name { get; set; }
+        internal TramTrafficLighterEventArgs(CrossRoadController.StatesCondition? state, CrossRoadController.TrafficLightsNames name)
+        {
+            State = state;
+            Name = name;
+        }
         internal bool RightLamp { get; set; }
         internal bool LeftLamp { get; set; }
         internal bool MiddleLamp { get; set; }
         internal bool BottomLamp { get; set; }
-        internal TramTrafficLighterEventArgs(bool rightLamp, bool leftLamp, bool middleLamp, bool bottomLamp)
+       
+        internal static void ShowTramTrafficLighter(TramTrafficLighterEventArgs e)
         {
-            RightLamp = rightLamp;
-            LeftLamp = leftLamp;
-            MiddleLamp = middleLamp;
-            BottomLamp = bottomLamp;
-        }
-        internal static void ShowTramTrafficLighter(Tram_Traffic_Lighters tramLighter, TramTrafficLighterEventArgs e)
-        {
-            Console.WriteLine($"{tramLighter.Name}");
+            switch (e.State)
+            {
+                case StatesCondition.STOP:
+                    e.LeftLamp = true;
+                    e.MiddleLamp = true;
+                    e.RightLamp = true;
+                    e.BottomLamp = false;
+                    break;                
+                case StatesCondition.GO:
+                    e.LeftLamp = true;
+                    e.MiddleLamp = true;
+                    e.RightLamp = true;
+                    e.BottomLamp = true;
+                    break;                
+                case StatesCondition.OFFLIGHT:
+                    e.LeftLamp = false;
+                    e.MiddleLamp = false;
+                    e.RightLamp = false;
+                    e.BottomLamp = false;
+                    break;
+            }
+            Console.WriteLine($"{e.Name}");
             Console.ResetColor();
             Console.WriteLine("-------");
             Console.Write("|");

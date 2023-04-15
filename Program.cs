@@ -1,12 +1,13 @@
 ﻿using Traffic_lighters;
-using static Traffic_lighters.TrafficLighterModes;
+
 
 Console.WriteLine($"Application start {DateTime.Now}");
 
-TrafficLighterModes mode = new ();
+CrossRoadController crossRoadController = new();
+await crossRoadController.DayMode();
+//NightMode
+//await crossRoadController.NightMode();
 
-mode.CheckStatus();
 
-await mode.Work_Mode(WorkMode.DayTimeMode);
 
 

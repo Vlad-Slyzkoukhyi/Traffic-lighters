@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+/*
 namespace Traffic_lighters
 {
     internal class Tram_Traffic_Lighters : TrafficLighter
@@ -44,3 +44,4 @@ namespace Traffic_lighters
     }
 
 }
+*/

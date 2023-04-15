@@ -20,7 +20,7 @@ namespace Traffic_lighters
         }
         internal static int DayModeEnd()
         {
-            TimeSpan endOfWork = new(23, 00, 00);
+            TimeSpan endOfWork = new(15, 20, 00);
             int hour = endOfWork.Hours;
             int minute = endOfWork.Minutes;
             int second = endOfWork.Seconds;

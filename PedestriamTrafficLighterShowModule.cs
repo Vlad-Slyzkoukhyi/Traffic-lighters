@@ -15,24 +15,6 @@ namespace Traffic_lighters
         {
             RedLamp = redLamp;
             GreenLamp = greenLamp;
-        }
-        internal static void ShowPedestrianTrafficLight(Pedestrian_Traffic_Lighters pedestrianTrafficLighter, PedestrianTrafficLighterEventArgs e)
-        {
-            Console.WriteLine($"{pedestrianTrafficLighter.Name}");
-            Console.ResetColor();
-            Console.WriteLine("---");
-            Console.Write("|");
-            Console.ForegroundColor = e.RedLamp ? ConsoleColor.Red : ConsoleColor.Gray;
-            Console.Write("O");
-            Console.ResetColor();
-            Console.WriteLine("|");
-            Console.Write("|");
-            Console.ForegroundColor = e.GreenLamp ? ConsoleColor.Green : ConsoleColor.Gray;
-            Console.Write("O");
-            Console.ResetColor();
-            Console.WriteLine("|");
-            Console.ResetColor();
-            Console.WriteLine("---");
-        }
+        }        
     }
 }

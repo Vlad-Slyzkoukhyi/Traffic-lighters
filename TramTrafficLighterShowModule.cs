@@ -20,33 +20,6 @@ namespace Traffic_lighters
             LeftLamp = leftLamp;
             MiddleLamp = middleLamp;
             BottomLamp = bottomLamp;
-        }
-        internal static void ShowTramTrafficLighter(Tram_Traffic_Lighters tramLighter, TramTrafficLighterEventArgs e)
-        {
-            Console.WriteLine($"{tramLighter.Name}");
-            Console.ResetColor();
-            Console.WriteLine("-------");
-            Console.Write("|");
-            Console.ForegroundColor = e.LeftLamp ? ConsoleColor.White : ConsoleColor.Black;
-            Console.Write("O");
-            Console.ResetColor();
-            Console.Write("|");
-            Console.ForegroundColor = e.MiddleLamp ? ConsoleColor.White : ConsoleColor.Black;
-            Console.Write("O");
-            Console.ResetColor();
-            Console.Write("|");
-            Console.ForegroundColor = e.RightLamp ? ConsoleColor.White : ConsoleColor.Black;
-            Console.Write("O");
-            Console.ResetColor();
-            Console.WriteLine("|");
-            Console.ResetColor();
-            Console.WriteLine("-------");
-            Console.Write("  |");
-            Console.ForegroundColor = e.BottomLamp ? ConsoleColor.White : ConsoleColor.Black;
-            Console.Write("O");
-            Console.ResetColor();
-            Console.WriteLine("|");
-            Console.WriteLine("   -");
-        }
+        }        
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Traffic_lighters;
 
-
+/*
 namespace Traffic_lighters
 {
     internal class Road_Traffic_Lighters : TrafficLighter
@@ -15,15 +15,17 @@ namespace Traffic_lighters
         internal bool RedLamp { get; set; }
         internal bool YellowLamp { get; set; }
         internal bool GreenLamp { get; set; }
+        
         internal Road_Traffic_Lighters(string name) : base (name)
         {             
         }
+        
         internal void RedOn()
         {
             RedLamp = true;
             YellowLamp = false;
-            GreenLamp = false;
-            RoadTrafficLighterEvent?.Invoke(this, new RoadTrafficLighterEventArgs (RedLamp,YellowLamp,GreenLamp));
+            GreenLamp = false;                       
+            RoadTrafficLighterEvent?.Invoke(this, new RoadTrafficLighterEventArgs (RedLamp,YellowLamp,GreenLamp));            
         }
         internal void RedYellowOn()
         {
@@ -55,3 +57,4 @@ namespace Traffic_lighters
         }        
     }
 }
+*/

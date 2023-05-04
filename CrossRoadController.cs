@@ -21,13 +21,13 @@ namespace Traffic_lighters
         internal event TramTrafficLighterHandler? TramTrafficLighterEvent;
         internal delegate void PedestrianTrafficLighterHandler(PedestrianTrafficLighterEventArgs e);
         internal event PedestrianTrafficLighterHandler? PedestrianTrafficLighterEvent;
-
+        
         internal StatesCondition? MainTLState { get; set; }
         internal StatesCondition? SecondaryTLState { get; set; }
         internal StatesCondition? TramTLState { get; set; }
         internal StatesCondition? PedestrianTLState { get; set; }
         internal int Time { get; set; }
-               
+
         internal enum TrafficLightsNames
         {
             MainTL = 0,
@@ -56,9 +56,9 @@ namespace Traffic_lighters
             PEDESTRIANBLINKGREEN = 9,
             OFFLIGHT = 10,
             BLINKYELLOW =11
-        }
+                            }
         internal enum StatesCondition
-        {
+                            {
             RED = 0,
             REDYELLOW = 1,
             GREEN = 2,
@@ -68,11 +68,11 @@ namespace Traffic_lighters
             GO = 6,
             STOP = 7,
             OFFLIGHT = 8
-        }
+                            }
         internal static Dictionary<CrossRoadsStates, CrossRoadController> BuildDayModeCollection()
-        {
+                            {
             return new Dictionary<CrossRoadsStates, CrossRoadController>
-            {
+                            {
             {CrossRoadsStates.ALLRED,             
                     new(){MainTLState = StatesCondition.RED,       SecondaryTLState = StatesCondition.RED,       TramTLState = StatesCondition.STOP,
                         PedestrianTLState = StatesCondition.RED,        Time = 0 } },
@@ -104,11 +104,11 @@ namespace Traffic_lighters
                     new(){MainTLState = StatesCondition.RED,       SecondaryTLState = StatesCondition.RED,       TramTLState = StatesCondition.GO,   
                         PedestrianTLState = StatesCondition.BLINKGREEN, Time=3000} }
             };
-        }
+                            }
         internal static Dictionary<CrossRoadsStates, CrossRoadController> BuildNightModeCollection()
-        {
+                {
             return new Dictionary<CrossRoadsStates, CrossRoadController>
-            {
+                    {
             {CrossRoadsStates.OFFLIGHT,
                     new(){MainTLState = StatesCondition.OFFLIGHT,       SecondaryTLState = StatesCondition.OFFLIGHT,       TramTLState = StatesCondition.OFFLIGHT,
                         PedestrianTLState = StatesCondition.OFFLIGHT,        Time = 500 } },
@@ -116,25 +116,25 @@ namespace Traffic_lighters
                     new(){MainTLState = StatesCondition.YELLOW, SecondaryTLState = StatesCondition.YELLOW,       TramTLState = StatesCondition.OFFLIGHT,
                         PedestrianTLState = StatesCondition.OFFLIGHT,        Time=500} },            
             };
-        }
+                            }
         internal async Task DayMode()
-        {
+                            {
             RoadTrafficLighterEvent += RoadTrafficLighterEventArgs.ShowRoadTrafficLighter;
             TramTrafficLighterEvent += TramTrafficLighterEventArgs.ShowTramTrafficLighter;
             PedestrianTrafficLighterEvent += PedestrianTrafficLighterEventArgs.ShowPedestrianTrafficLight;
             
             Dictionary<CrossRoadsStates, CrossRoadController> DayModeStates = BuildDayModeCollection();
-            do
-            {
+                    do
+                    {
                 foreach (KeyValuePair<CrossRoadsStates, CrossRoadController> stateName in DayModeStates)
-                {
+                        {
                     var trafficLightState = stateName.Value;
                     var time = trafficLightState.Time;
                     foreach (var trafficLightName in TrafficLightersNames)
-                    {
+                            {
                         var trafficLighter = trafficLightName;
                         switch (trafficLightName.Value)
-                        {
+                            {
                             case TrafficLightsNames.MainTL:
                                 RoadTrafficLighterEvent?.Invoke(new RoadTrafficLighterEventArgs(trafficLightState.MainTLState, trafficLighter.Value, time));
                                 break;
@@ -153,6 +153,7 @@ namespace Traffic_lighters
                 }
             }
             while (true);
+            
         }
         internal async Task NightMode()
         {
@@ -161,8 +162,8 @@ namespace Traffic_lighters
             PedestrianTrafficLighterEvent += PedestrianTrafficLighterEventArgs.ShowPedestrianTrafficLight;
 
             Dictionary<CrossRoadsStates, CrossRoadController> NightModeStates = BuildNightModeCollection();
-            do
-            {
+                do
+                {
                 foreach (KeyValuePair<CrossRoadsStates, CrossRoadController> stateName in NightModeStates)
                 {
                     var trafficLightState = stateName.Value;
@@ -188,6 +189,7 @@ namespace Traffic_lighters
                     }
                     await Task.Delay(time);
                 }
+                while (time > TimeOfDay.DayStart() && time < TimeOfDay.DayModeStart());
             }
             while (true);
         }

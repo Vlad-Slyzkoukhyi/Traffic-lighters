@@ -192,6 +192,4 @@ namespace Traffic_lighters
             while (true);
         }
     }
-}
-
-    
+}    

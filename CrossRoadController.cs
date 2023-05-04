@@ -110,10 +110,10 @@ namespace Traffic_lighters
             return new Dictionary<CrossRoadsStates, CrossRoadController>
             {
             {CrossRoadsStates.OFFLIGHT,
-                    new(){MainTLState = StatesCondition.OFFLIGHT,       SecondaryTLState = StatesCondition.OFFLIGHT,       TramTLState = StatesCondition.OFFLIGHT,
+                    new(){MainTLState = StatesCondition.OFFLIGHT,   SecondaryTLState = StatesCondition.OFFLIGHT,   TramTLState = StatesCondition.OFFLIGHT,
                         PedestrianTLState = StatesCondition.OFFLIGHT,        Time = 500 } },
             {CrossRoadsStates.BLINKYELLOW,
-                    new(){MainTLState = StatesCondition.YELLOW, SecondaryTLState = StatesCondition.YELLOW,       TramTLState = StatesCondition.OFFLIGHT,
+                    new(){MainTLState = StatesCondition.YELLOW,     SecondaryTLState = StatesCondition.YELLOW,     TramTLState = StatesCondition.OFFLIGHT,
                         PedestrianTLState = StatesCondition.OFFLIGHT,        Time=500} },            
             };
         }
